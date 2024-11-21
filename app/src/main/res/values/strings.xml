@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ldlCalculator</string>
+    <string name="calculate_ldl">Calculate LDL Cholesterol</string>
+    <string name="total_cholesterol">Total Cholesterol</string>
+    <string name="hdl_cholesterol">HDL Cholesterol</string>
+    <string name="triglycerides">Triglycerides</string>
+    <string name="ldl_cholesterol">LDL Cholesterol: %s</string>
+</resources>
