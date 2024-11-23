@@ -5,4 +5,5 @@
     <string name="hdl_cholesterol">HDL Cholesterol</string>
     <string name="triglycerides">Triglycerides</string>
     <string name="ldl_cholesterol">LDL Cholesterol: %s</string>
+    <string name="ldl_cholesterolev">Your LDL level is %s</string>
 </resources>

@@ -32,6 +32,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.unit.sp
 import java.text.NumberFormat
 
 class MainActivity : ComponentActivity() {
@@ -60,6 +61,7 @@ fun LdlCalculatorLayout() {
     val hdl = hdlCholesterol.toDoubleOrNull() ?: 0.0
     val trig = triglycerides.toDoubleOrNull() ?: 0.0
     val ldl = calculateLdl(total, hdl, trig)
+    val evaluation = evaluateLdl(ldl)
 
     Column(
         modifier = Modifier
@@ -95,8 +97,16 @@ fun LdlCalculatorLayout() {
             modifier = Modifier.padding(bottom = 32.dp).fillMaxWidth(),
         )
         Text(
-            text = stringResource(R.string.ldl_cholesterol, ldl),
-            style = MaterialTheme.typography.displaySmall
+            text = stringResource(R.string.ldl_cholesterol, NumberFormat.getNumberInstance().format(ldl)),
+            style = MaterialTheme.typography.displaySmall,
+            fontSize = 20.sp,
+            modifier = Modifier.align(alignment = Alignment.Start)
+        )
+        Text(
+            text = stringResource(R.string.ldl_cholesterolev, evaluation),
+            style = MaterialTheme.typography.displaySmall,
+            fontSize = 20.sp,
+            modifier = Modifier.align(alignment = Alignment.Start)
         )
         Spacer(modifier = Modifier.height(150.dp))
     }
@@ -123,9 +133,32 @@ fun MeasureField(
  * Cholesterol LDL = Colesterol total - ( Colesterol VLDL + Colesterol HDL)
  * Colesterol VLDL = Triglicéridos / 5
  */
-private fun calculateLdl(totalCholesterol: Double, hdlCholesterol: Double, triglycerides: Double): String {
+private fun calculateLdl(totalCholesterol: Double, hdlCholesterol: Double, triglycerides: Double): Double {
     var ldlCholesterol = totalCholesterol - ( triglycerides/5 + hdlCholesterol)
-    return NumberFormat.getNumberInstance().format(ldlCholesterol)
+    return ldlCholesterol
+}
+
+
+
+/**
+ * Evaluates the LDL result by this criteria:
+ *  Optimal: Less than 100 mg/dL
+ *  Near-optimal: 100-129;
+ *  Borderline high: 130-159;
+ *  High: 160-189;
+ *  Very high: 190 or higher
+ */
+fun evaluateLdl(ldl: Double): String {
+    var evaluation = ""
+    when {
+        ldl > 0 &&  ldl < 100 -> evaluation = "Optimal"
+        ldl >= 100 && ldl < 130 -> evaluation = "Near-optimal"
+        ldl >= 130 && ldl < 160 -> evaluation = "Borderline high"
+        ldl >= 160 && ldl < 190 -> evaluation = "High"
+        ldl >= 190 -> evaluation = "Very high"
+        else -> ""
+    }
+    return evaluation
 }
 
 @Preview(showBackground = true)
